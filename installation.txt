@@ -1,16 +1,16 @@
-git clone https://github.com/GOODJ0B/Babycam
-
-cd Babycam
-
 sudo apt-get update && sudo apt-get upgrade
+sudo apt-get install git
 sudo apt-get install python3-pip
 
+git clone https://github.com/GOODJ0B/Babycam
+cd Babycam
+
 sudo pip3 install RPi.bme280
-
 sudo apt-get install python-picamera python3-picamera
-
 sudo pip3 install RPi.GPIO
 
 sudo raspi-config -> interfacing options -> enable camera
 
-sudo nano /etc/rc.local -> voeg 'python3 /home/pi/Babycam/babyc
+sudo nano /etc/rc.local -> voeg twee regels toe vlak voor exit 0 (let op de &):
+	/home/pi/Babycam/updatescript.sh
+	python3 /home/pi/Babycam/babycam.py &

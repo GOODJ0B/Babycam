@@ -23,10 +23,9 @@ PAGE="""\
 <html>
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<title>Raspberry BabyCam</title>
+<title>BabyCam</title>
 </head>
-<body>
-<center><h1>Babycam</h1></center>
+<body style="background-color:black;">
 <center><img src="stream.mjpg" width="640" height="480"></center>
 <center><a href="#" onclick="$.get('liteon.html');">Light On</a>
         <a href="#" onclick="$.get('liteoff.html');">Light Off</a></center>
