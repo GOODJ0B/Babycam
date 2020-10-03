@@ -29,10 +29,10 @@ PAGE="""\
 <center><img src="stream.mjpg" width="640" height="480"></center>
 <center><a href="#" onclick="$.get('liteon.html');">Light On</a>
         <a href="#" onclick="$.get('liteoff.html');">Light Off</a></center>
-<center> Room Temperature: <span id="temp">---</span> &#8451;</center>
+<div style="color:white;"><center> Room Temperature: <span id="temp">---</span> &#8451;</center>
 <center> Room Humidity: <span id="humi">---</span> rH</center>
 <center> Room Pressure: <span id="press">---</span> hPa</center>
-<script>
+</div><script>
 var myVar = setInterval(myTimer, 10000);
 
 function myTimer() {
