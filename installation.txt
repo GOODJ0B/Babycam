@@ -9,8 +9,7 @@ sudo pip3 install RPi.bme280
 sudo apt-get install python-picamera python3-picamera
 sudo pip3 install RPi.GPIO
 
-sudo raspi-config -> interfacing options -> enable camera
+sudo raspi-config -> interfacing options -> enable camera en I2C
 
-sudo nano /etc/rc.local -> voeg twee regels toe vlak voor exit 0 (let op de &):
-	/home/pi/Babycam/updatescript.sh
+sudo nano /etc/rc.local -> voeg toe vlak voor exit 0 (let op de &):
 	python3 /home/pi/Babycam/babycam.py &
