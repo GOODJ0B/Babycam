@@ -8,44 +8,9 @@ import io
 import picamera
 import logging
 import socketserver
-import RPi.GPIO as GPIO
 
 from threading import Condition
 from http import server
-
-#setup gpio for nightlight
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(27,GPIO.OUT)
-
-
-PAGE="""\
-<html>
-<head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<title>BabyCam</title>
-</head>
-<body style="background-color:black;">
-<center><img src="stream.mjpg" width="640" height="480"></center>
-<center><a href="#" onclick="$.get('liteon.html');">Light On</a>
-        <a href="#" onclick="$.get('liteoff.html');">Light Off</a></center>
-<div style="color:white;"><center> Room Temperature: <span id="temp">---</span> &#8451;</center>
-<center> Room Humidity: <span id="humi">---</span> rH</center>
-<center> Room Pressure: <span id="press">---</span> hPa</center>
-</div><script>
-var myVar = setInterval(myTimer, 10000);
-
-function myTimer() {
-  var d = new Date();
-  $.get('roomtemp.html', function(data){document.getElementById("temp").innerHTML = data; });
-  $.get('roompres.html', function(data){document.getElementById("press").innerHTML = data; });
-  $.get('roomhumi.html', function(data){document.getElementById("humi").innerHTML = data; });
-  
-}
-</script>
-</body>
-</html>
-"""
 
 class StreamingOutput(object):
     def __init__(self):
@@ -68,76 +33,54 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.send_response(301)
-            self.send_header('Location', '/index.html')
+            self.send_header('Location', '/stream.mjpg')
             self.end_headers()
         
-        elif self.path == '/roomtemp.html':
+        elif self.path == '/temperature':
             port = 1
             address = 0x76
             bus = smbus2.SMBus(port)
             calibration_params = bme280.load_calibration_params(bus, address)
             data = bme280.sample(bus, address, calibration_params)
-            roomPress = data.pressure
-            roomHumid = data.humidity
-            
-            # temp reads 10 degrees high for some reason...
-            content = str(int(data.temperature-10)).encode('utf-8')
+
+            temperature = str(int(data.temperature)).encode('utf-8')
+            humidity = str(int(data.humidity)).encode('utf-8')
+            pressure = str(int(data.pressure)).encode('utf-8')
+
+            content = "{\"temperature\":%s,\"humidity\":%s,\"pressure\":%s}" % (temperature, humidity, pressure)
+
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', len(content))
+            self.send_header('Content-Length', str(len(content)))
             self.end_headers()
             self.wfile.write(content)
-        elif self.path == '/roomhumi.html':
+        elif self.path == '/humidity':
             port = 1
             address = 0x76
             bus = smbus2.SMBus(port)
             calibration_params = bme280.load_calibration_params(bus, address)
             data = bme280.sample(bus, address, calibration_params)       
-            # temp reads 10 degrees high for some reason...
+
             content = str(int(data.humidity)).encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', len(content))
+            self.send_header('Content-Length', str(len(content)))
             self.end_headers()
             self.wfile.write(content)           
-        elif self.path == '/roompres.html':
+        elif self.path == '/pressure':
             port = 1
             address = 0x76
             bus = smbus2.SMBus(port)
             calibration_params = bme280.load_calibration_params(bus, address)
             data = bme280.sample(bus, address, calibration_params)
             
-            # temp reads 10 degrees high for some reason...
             content = str(int(data.pressure)).encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', len(content))
+            self.send_header('Content-Length', str(len(content)))
             self.end_headers()
             self.wfile.write(content)
-            
-        elif self.path == '/liteon.html':
-            GPIO.output(27,GPIO.HIGH)
-            content = PAGE.encode('utf-8')
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', len(content))
-            self.end_headers()
-            self.wfile.write(content)
-        elif self.path == '/liteoff.html':
-            GPIO.output(27,GPIO.LOW)
-            content = PAGE.encode('utf-8')
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', len(content))
-            self.end_headers()
-            self.wfile.write(content)
-        elif self.path == '/index.html':
-            content = PAGE.encode('utf-8')
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', len(content))
-            self.end_headers()
-            self.wfile.write(content)
+
         elif self.path == '/stream.mjpg':
             self.send_response(200)
             self.send_header('Age', 0)
@@ -152,7 +95,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         frame = output.frame
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
-                    self.send_header('Content-Length', len(frame))
+                    self.send_header('Content-Length', str(len(frame)))
                     self.end_headers()
                     self.wfile.write(frame)
                     self.wfile.write(b'\r\n')
@@ -168,13 +111,13 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True
     daemon_threads = True
 
-with picamera.PiCamera(resolution='640x480', framerate=24) as camera:
+with picamera.PiCamera(resolution='1280x1024', framerate=24) as camera:
     output = StreamingOutput()
     #Uncomment the next line to change your Pi's Camera rotation (in degrees)
     #camera.rotation = 90
     camera.start_recording(output, format='mjpeg')
     try:
-        address = ('', 8000)
+        address = ('', 5000)
         server = StreamingServer(address, StreamingHandler)
         server.serve_forever()
     finally:
