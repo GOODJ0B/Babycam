@@ -17,7 +17,7 @@ export class AppComponent implements OnInit {
 
   public ngOnInit(): void {
     this.updateValues();
-    setInterval(this.updateValues.bind(this), 60000);
+    // setInterval(this.updateValues.bind(this), 60000);
   }
 
 
@@ -26,6 +26,6 @@ export class AppComponent implements OnInit {
       this.temperature = values.temperature;
       this.pressure = values.pressure;
       this.humidity = values.humidity;
-    })
+    });
   }
 }
