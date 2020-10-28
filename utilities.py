@@ -20,10 +20,10 @@ def sendCommand():
     calibration_params = bme280.load_calibration_params(bus, address)
     data = bme280.sample(bus, address, calibration_params)
 
-    temperature = str(int(data.temperature)).encode('utf-8')
-    humidity = str(int(data.humidity)).encode('utf-8')
-    pressure = str(int(data.pressure)).encode('utf-8')
+    temperature = str(int(data.temperature))
+    humidity = str(int(data.humidity))
+    pressure = str(int(data.pressure))
 
-    return "{\"temperature\":%s,\"humidity\":%s,\"pressure\":%s}" % (str(temperature), str(humidity), str(pressure))
+    return "{\"temperature\":%s,\"humidity\":%s,\"pressure\":%s}" % (temperature, humidity, pressure)
 
 app.run(host='0.0.0.0')
