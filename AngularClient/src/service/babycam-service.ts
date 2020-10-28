@@ -9,7 +9,8 @@ import {Observable} from 'rxjs';
 export class BabycamService {
 
   public url: string;
-  private port = 5000;
+  private streamPort = 5001;
+  private utilitiesPort = 5000;
   public streamUrl: string;
 
   constructor(private readonly  httpClient: HttpClient) {
@@ -24,11 +25,9 @@ export class BabycamService {
       }
     }
 
-    // add port number of backend
-    this.url = url + ':' + this.port;
-
-    this.url = 'http://192.168.0.33:5000';
-    this.streamUrl = this.url + '/stream.mjpg';
+    url = 'http://192.168.0.33';
+    this.url = url + ':' + this.utilitiesPort;
+    this.streamUrl = this.url + ':' + this.streamPort + '/stream.mjpg';
   }
 
   public getValues(): Observable<Values> {
