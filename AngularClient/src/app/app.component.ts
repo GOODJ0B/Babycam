@@ -20,7 +20,6 @@ export class AppComponent implements OnInit {
     // setInterval(this.updateValues.bind(this), 60000);
   }
 
-
   public updateValues(): void {
     this.babycamService.getValues().subscribe(values => {
       this.temperature = values.temperature;
