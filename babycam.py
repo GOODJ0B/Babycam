@@ -37,23 +37,23 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.end_headers()
         
         elif self.path == '/values':
-            port = 1
-            address = 0x76
-            bus = smbus2.SMBus(port)
-            calibration_params = bme280.load_calibration_params(bus, address)
-            data = bme280.sample(bus, address, calibration_params)
+            #port = 1
+            #address = 0x76
+            #bus = smbus2.SMBus(port)
+            #calibration_params = bme280.load_calibration_params(bus, address)
+            #data = bme280.sample(bus, address, calibration_params)
 
-            temperature = str(int(data.temperature)).encode('utf-8')
-            humidity = str(int(data.humidity)).encode('utf-8')
-            pressure = str(int(data.pressure)).encode('utf-8')
+            #temperature = str(int(data.temperature)).encode('utf-8')
+            #humidity = str(int(data.humidity)).encode('utf-8')
+            #pressure = str(int(data.pressure)).encode('utf-8')
 
-            content = "{\"temperature\":%s,\"humidity\":%s,\"pressure\":%s}" % (temperature, humidity, pressure)
+            #content = "{\"temperature\":%s,\"humidity\":%s,\"pressure\":%s}" % (temperature, humidity, pressure)
 
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
             self.send_header('Content-Length', str(len(content)))
             self.end_headers()
-            self.wfile.write(content)
+            self.wfile.write("test")
 
         elif self.path == '/stream.mjpg':
             self.send_response(200)
