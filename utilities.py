@@ -12,7 +12,7 @@ def home():
 
 
 @app.route('/values', methods=['GET'])
-def sendCommand(command):
+def sendCommand():
     print('=> getting values')
     port = 1
     address = 0x76
