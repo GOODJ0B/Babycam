@@ -11,7 +11,7 @@ def home():
     return 'Online.'
 
 
-@app.route('/values', methods=['PUT'])
+@app.route('/values', methods=['GET'])
 def sendCommand(command):
     print('=> getting values')
     port = 1
