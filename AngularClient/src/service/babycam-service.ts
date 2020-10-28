@@ -27,7 +27,7 @@ export class BabycamService {
 
     url = 'http://192.168.0.33';
     this.url = url + ':' + this.utilitiesPort;
-    this.streamUrl = this.url + ':' + this.streamPort + '/stream.mjpg';
+    this.streamUrl = url + ':' + this.streamPort + '/stream.mjpg';
   }
 
   public getValues(): Observable<Values> {
