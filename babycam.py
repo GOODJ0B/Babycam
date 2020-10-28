@@ -51,7 +51,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', str(len(content)))
+            self.send_header('Content-Length', str(len("test")))
             self.end_headers()
             self.wfile.write("test")
 
