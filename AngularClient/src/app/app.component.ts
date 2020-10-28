@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Values} from '../model/values';
+import {BabycamService} from '../service/babycam-service';
 
 @Component({
   selector: 'app-root',
@@ -11,20 +11,21 @@ export class AppComponent implements OnInit {
   public temperature: number;
   public humidity: number;
   public pressure: number;
-  public apiUrl = 'http://192.168.0.33';
+
+  constructor(public readonly babycamService: BabycamService) {
+  }
 
   public ngOnInit(): void {
+    this.updateValues();
     setInterval(this.updateValues.bind(this), 60000);
-    const values = {
-      temperature: 20.3,
-      humidity: 33,
-      pressure: 43,
-    } as Values;
-    console.log(JSON.stringify(values));
   }
 
 
   public updateValues(): void {
-
+    this.babycamService.getValues().subscribe(values => {
+      this.temperature = values.temperature;
+      this.pressure = values.pressure;
+      this.humidity = values.humidity;
+    })
   }
 }
