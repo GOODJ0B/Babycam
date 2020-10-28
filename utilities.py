@@ -24,6 +24,6 @@ def sendCommand():
     humidity = str(int(data.humidity)).encode('utf-8')
     pressure = str(int(data.pressure)).encode('utf-8')
 
-    return "{\"temperature\":%s,\"humidity\":%s,\"pressure\":%s}" % (temperature, humidity, pressure)
+    return "{\"temperature\":%s,\"humidity\":%s,\"pressure\":%s}" % (str(temperature), str(humidity), str(pressure))
 
 app.run(host='0.0.0.0')
