@@ -26,6 +26,8 @@ export class BabycamService {
 
     // add port number of backend
     this.url = url + ':' + this.port;
+
+    this.url = 'http://192.168.0.33:5000';
     this.streamUrl = this.url + '/stream.mjpg';
   }
 
