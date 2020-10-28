@@ -36,7 +36,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Location', '/stream.mjpg')
             self.end_headers()
         
-        elif self.path == '/temperature':
+        elif self.path == '/values':
             port = 1
             address = 0x76
             bus = smbus2.SMBus(port)
@@ -49,32 +49,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
             content = "{\"temperature\":%s,\"humidity\":%s,\"pressure\":%s}" % (temperature, humidity, pressure)
 
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', str(len(content)))
-            self.end_headers()
-            self.wfile.write(content)
-        elif self.path == '/humidity':
-            port = 1
-            address = 0x76
-            bus = smbus2.SMBus(port)
-            calibration_params = bme280.load_calibration_params(bus, address)
-            data = bme280.sample(bus, address, calibration_params)       
-
-            content = str(int(data.humidity)).encode('utf-8')
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/html')
-            self.send_header('Content-Length', str(len(content)))
-            self.end_headers()
-            self.wfile.write(content)           
-        elif self.path == '/pressure':
-            port = 1
-            address = 0x76
-            bus = smbus2.SMBus(port)
-            calibration_params = bme280.load_calibration_params(bus, address)
-            data = bme280.sample(bus, address, calibration_params)
-            
-            content = str(int(data.pressure)).encode('utf-8')
             self.send_response(200)
             self.send_header('Content-Type', 'text/html')
             self.send_header('Content-Length', str(len(content)))
