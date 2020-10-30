@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {BabycamService} from '../service/babycam-service';
 
 @Component({
@@ -11,6 +11,10 @@ export class AppComponent implements OnInit {
   public temperature: number;
   public humidity: number;
   public pressure: number;
+  public width: number;
+  public height: number;
+  private videoResolutionWidth = 1280;
+  private videoResolutionHeight = 1040;
 
   constructor(public readonly babycamService: BabycamService) {
   }
@@ -18,6 +22,26 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     this.updateValues();
     // setInterval(this.updateValues.bind(this), 60000);
+    this.onResize(null);
+  }
+
+  @HostListener('window:resize', ['$event'])
+  public onResize(event): void {
+    let height = window.innerHeight;
+    let width = window.innerWidth;
+
+    const videoRatio = this.videoResolutionHeight / this.videoResolutionWidth;
+
+    height -= 38;
+    if ((height / width) > (videoRatio)) {
+      width -= 16;
+      height = (width * videoRatio);
+    } else {
+      width = height / videoRatio;
+    }
+
+    this.width = width;
+    this.height = height;
   }
 
   public updateValues(): void {
