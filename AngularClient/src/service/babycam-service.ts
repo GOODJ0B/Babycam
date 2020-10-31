@@ -25,7 +25,7 @@ export class BabycamService {
       }
     }
 
-    url = 'http://192.168.0.32';
+    // url = 'http://192.168.0.32';
     this.url = url + ':' + this.utilitiesPort;
     this.streamUrl = url + ':' + this.streamPort + '/stream.mjpg';
   }
