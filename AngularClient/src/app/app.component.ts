@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   public pressure: number;
   public width: number;
   public height: number;
-  private videoResolutionWidth = 1280;
+  private videoResolutionWidth = 780;
   private videoResolutionHeight = 1040;
 
   constructor(public readonly babycamService: BabycamService) {
@@ -32,9 +32,10 @@ export class AppComponent implements OnInit {
 
     const videoRatio = this.videoResolutionHeight / this.videoResolutionWidth;
 
-    height -= 38;
+    if (this.temperature !== undefined) {
+      height -= 38;
+    }
     if ((height / width) > (videoRatio)) {
-      width -= 16;
       height = (width * videoRatio);
     } else {
       width = height / videoRatio;
@@ -46,9 +47,13 @@ export class AppComponent implements OnInit {
 
   public updateValues(): void {
     this.babycamService.getValues().subscribe(values => {
+      const previousTemp = this.temperature;
       this.temperature = values.temperature;
       this.pressure = values.pressure;
       this.humidity = values.humidity;
+      if (previousTemp === undefined) {
+        this.onResize(null);
+      }
     });
   }
 }
