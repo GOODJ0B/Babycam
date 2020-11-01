@@ -2,12 +2,11 @@
 # Based on Source code from the official PiCamera package and RPi.bme280 examples
 
 import io
-import picamera
 import logging
+import picamera
 import socketserver
-
-from threading import Condition
 from http import server
+from threading import Condition
 
 
 class StreamingOutput(object):
@@ -32,10 +31,10 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
             self.send_response(301)
-            self.send_header('Location', '/stream.mjpg')
+            self.send_header('Location', '/video')
             self.end_headers()
 
-        elif self.path == '/stream.mjpg':
+        elif self.path == '/video':
             self.send_response(200)
             self.send_header('Age', 0)
             self.send_header('Cache-Control', 'no-cache, private')
