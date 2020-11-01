@@ -1,15 +1,33 @@
-sudo apt-get update && sudo apt-get upgrade
-sudo apt-get install git
-sudo apt-get install python3-pip
+// These instructions assume a clean install of Raspbian Lite //
+// A static IP Adress might be usefull, but is not described here //
+
+sudo apt-get update && 
+sudo apt-get upgrade &&
+sudo apt-get -y install git &&
+sudo apt-get -y install python3-pip &&
+sudo apt-get -y install apache2 &&
+sudo apt-get -y install python-picamera python3-picamera &&
 
 git clone https://github.com/GOODJ0B/Babycam
-cd Babycam
 
-sudo pip3 install RPi.bme280
-sudo apt-get install python-picamera python3-picamera
+cd Babycam
+sudo pip3 install RPi.bme280 &&
 sudo pip3 install RPi.GPIO
 
 sudo raspi-config -> interfacing options -> enable camera en I2C
 
 sudo nano /etc/rc.local -> voeg toe vlak voor exit 0 (let op de &):
-	python3 /home/pi/Babycam/babycam.py &
+	python3 /home/pi/Babycam/stream.py &
+	python3 /home/pi/Babycam/utilities.py &
+
+sudo nano /etc/apache2/sites-available/000-default.conf
+ 	-> verander /var/www/html in 			/home/pi/Babycam/AngularClient/dist/BabyCam (yes, only second one with capital C, my bad)
+sudo nano /etc/apache2/apache2.conf
+ --> zelfde verhaal (excl /html) (zoek naar 
+<Directory /var/www/>
+    Options Indexes FollowSymLinks
+    AllowOverride None
+    Require all granted
+</Directory>)
+
+sudo reboot

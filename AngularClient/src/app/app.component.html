@@ -1,6 +1,7 @@
 <img [width]="width" [height]="height" [src]="babycamService.streamUrl">
+<span *ngIf="temperature !== undefined" style="margin-left: 3px">
 <br>
-<span *ngIf="temperature !== undefined" style="margin-left: 3px">{{temperature}} &#8451;
+  {{temperature}} &#8451;
   - {{humidity}} rH
   - {{pressure}} hPa
 </span>
