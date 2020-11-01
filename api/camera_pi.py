@@ -1,13 +1,14 @@
 import io
-import time
 import picamera
+import time
+
 from base_camera import BaseCamera
 
 
 class Camera(BaseCamera):
     @staticmethod
     def frames():
-        with picamera.PiCamera() as camera:
+        with picamera.PiCamera(resolution='900x1024', framerate=24) as camera:
             # let camera warm up
             time.sleep(2)
 
