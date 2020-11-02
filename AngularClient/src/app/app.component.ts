@@ -60,6 +60,8 @@ export class AppComponent implements OnInit {
   public saveStill(): void {
     this.babycamService.saveStill().subscribe(() => {
       this.saveSuccessFul = true;
+      // wait
+      this.saveSuccessFul = false;
     });
   }
 }
