@@ -4,8 +4,8 @@
 import io
 import logging
 import picamera
-import time
 import socketserver
+import time
 from http import server
 from threading import Condition
 
@@ -37,11 +37,15 @@ class StreamingOutput(object):
 class StreamingHandler(server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
+            self.send_response(301)
+            self.send_header('Location', '/video')
+            self.end_headers()
+
+        if self.path == '/saveStill':
             print('safeImage is now true')
             global safeImage
             safeImage = True
-            self.send_response(301)
-            self.send_header('Location', '/video')
+            self.send_response(200)
             self.end_headers()
 
         elif self.path == '/video':
