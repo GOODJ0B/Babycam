@@ -28,7 +28,7 @@ class StreamingOutput(object):
             self.buffer.seek(0)
             global safeImage
             if safeImage:
-                io.open(str(round(time.time() * 1000)) + '.jpg', 'wb').write(buf)
+                io.open('/home/pi/Babycam/AngularClient/dist/BabyCam/media' + str(round(time.time() * 1000)) + '.jpg', 'wb').write(buf)
                 print('image saved')
                 safeImage = False
         return self.buffer.write(buf)
@@ -88,6 +88,7 @@ with picamera.PiCamera(resolution='900x1024', framerate=24) as camera:
     try:
         address = ('', 5001)
         server = StreamingServer(address, StreamingHandler)
+        print('Server online.')
         server.serve_forever()
     finally:
         camera.stop_recording()
