@@ -3,12 +3,14 @@
 
 import io
 import picamera
+import time
 import logging
 import socketserver
 
 from threading import Condition
 from http import server
 
+safeImage = False
 
 class StreamingOutput(object):
     def __init__(self):
@@ -25,12 +27,20 @@ class StreamingOutput(object):
                 self.frame = self.buffer.getvalue()
                 self.condition.notify_all()
             self.buffer.seek(0)
+            global safeImage
+            if safeImage:
+                io.open(str(round(time.time() * 1000)) + '.jpg', 'wb').write(buf)
+                print('image saved')
+                safeImage = False
         return self.buffer.write(buf)
 
 
 class StreamingHandler(server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
+            print('safeImage is now true')
+            global safeImage
+            safeImage = True
             self.send_response(301)
             self.send_header('Location', '/stream.mjpg')
             self.end_headers()
