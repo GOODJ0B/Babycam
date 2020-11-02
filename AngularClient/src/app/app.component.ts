@@ -13,8 +13,8 @@ export class AppComponent implements OnInit {
   public pressure: number;
   public width: number;
   public height: number;
-  private videoResolutionWidth = 900;
-  private videoResolutionHeight = 1040;
+  private videoResolutionWidth = 960;
+  private videoResolutionHeight = 1080;
 
   constructor(public readonly babycamService: BabycamService) {
   }
@@ -54,6 +54,12 @@ export class AppComponent implements OnInit {
       if (previousTemp === undefined) {
         this.onResize(null);
       }
+    });
+  }
+
+  public saveStill(): void {
+    this.babycamService.saveStill().subscribe(() => {
+      this.saveSuccessFul = true;
     });
   }
 }
