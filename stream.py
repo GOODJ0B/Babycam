@@ -2,13 +2,12 @@
 # Based on Source code from the official PiCamera package and RPi.bme280 examples
 
 import io
+import logging
 import picamera
 import time
-import logging
 import socketserver
-
-from threading import Condition
 from http import server
+from threading import Condition
 
 safeImage = False
 
@@ -42,10 +41,10 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             global safeImage
             safeImage = True
             self.send_response(301)
-            self.send_header('Location', '/stream.mjpg')
+            self.send_header('Location', '/video')
             self.end_headers()
 
-        elif self.path == '/stream.mjpg':
+        elif self.path == '/video':
             self.send_response(200)
             self.send_header('Age', 0)
             self.send_header('Cache-Control', 'no-cache, private')
@@ -80,7 +79,7 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
 with picamera.PiCamera(resolution='900x1024', framerate=24) as camera:
     output = StreamingOutput()
     # Uncomment the next line to change your Pi's Camera rotation (in degrees)
-    camera.rotation = 180
+    # camera.rotation = 180
     camera.start_recording(output, format='mjpeg')
     try:
         address = ('', 5001)
