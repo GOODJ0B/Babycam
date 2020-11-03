@@ -26,10 +26,10 @@ export class BabycamService {
       }
     }
 
-    // url = 'http://192.168.0.32';
+    url = 'http://192.168.0.32';
     this.url = url + ':' + this.utilitiesPort;
-    this.streamUrl = url + ':' + this.streamPort;
-    this.streamBaseUrl = url + ':' + this.streamPort + '/video';
+    this.streamUrl = url + ':' + this.streamPort + '/video';
+    this.streamBaseUrl = url + ':' + this.streamPort;
   }
 
   public getValues(): Observable<Values> {
@@ -37,6 +37,6 @@ export class BabycamService {
   }
 
   public saveStill(): Observable<null> {
-    return this.httpClient.get<Values>(this.streamBaseUrl + '/saveStill');
+    return this.httpClient.get<null>(this.streamBaseUrl + '/saveStill');
   }
 }

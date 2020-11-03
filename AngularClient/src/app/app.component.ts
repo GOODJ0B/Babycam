@@ -15,6 +15,7 @@ export class AppComponent implements OnInit {
   public height: number;
   private videoResolutionWidth = 960;
   private videoResolutionHeight = 1080;
+  public saveSuccessFul: boolean;
 
   constructor(public readonly babycamService: BabycamService) {
   }
