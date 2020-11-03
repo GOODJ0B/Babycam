@@ -26,7 +26,7 @@ export class BabycamService {
       }
     }
 
-    // url = 'http://192.168.0.32';
+    url = 'http://192.168.0.32';
     this.url = url + ':' + this.utilitiesPort;
     this.streamUrl = url + ':' + this.streamPort + '/video';
     this.streamBaseUrl = url + ':' + this.streamPort;
@@ -36,7 +36,7 @@ export class BabycamService {
     return this.httpClient.get<Values>(this.url + '/values');
   }
 
-  public saveStill(): Observable<null> {
-    return this.httpClient.get<null>(this.streamBaseUrl + '/saveStill');
+  public saveStill(): Observable<any> {
+    return this.httpClient.get(this.streamBaseUrl + '/saveStill');
   }
 }

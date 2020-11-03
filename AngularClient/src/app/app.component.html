@@ -1,11 +1,9 @@
 <img [width]="width" [height]="height" [src]="babycamService.streamUrl">
 <span *ngIf="temperature !== undefined" style="margin-left: 3px">
 <br>
+<a class="circle-link" [class.green]="saveSuccessFul" (click)="saveStill()">Maak foto</a>
+ &nbsp; <a href="/media">open foto's</a>
   {{temperature}} &#8451;
   - {{humidity}} rH
   - {{pressure}} hPa
 </span>
-<a class="circle-link"
-   (click)="saveStill()">
-  <i [class]="'fa fa-camera'"></i>
-</a>
