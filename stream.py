@@ -4,8 +4,8 @@
 import io
 import logging
 import picamera
-import time
 import socketserver
+import time
 from http import server
 from threading import Condition
 
@@ -28,7 +28,9 @@ class StreamingOutput(object):
             self.buffer.seek(0)
             global safeImage
             if safeImage:
-                io.open(str(round(time.time() * 1000)) + '.jpg', 'wb').write(buf)
+                with io.open('/home/pi/Babycam/AngularClient/dist/BabyCam/media/'
+                             + str(round(time.time() * 1000)) + '.jpg', 'wb') as file:
+                    file.write(buf)
                 print('image saved')
                 safeImage = False
         return self.buffer.write(buf)
@@ -37,11 +39,14 @@ class StreamingOutput(object):
 class StreamingHandler(server.BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == '/':
-            print('safeImage is now true')
-            global safeImage
-            safeImage = True
             self.send_response(301)
             self.send_header('Location', '/video')
+            self.end_headers()
+
+        if self.path == '/saveStill':
+            global safeImage
+            safeImage = True
+            self.send_response(200)
             self.end_headers()
 
         elif self.path == '/video':
@@ -76,7 +81,7 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     daemon_threads = True
 
 
-with picamera.PiCamera(resolution='900x1024', framerate=24) as camera:
+with picamera.PiCamera(resolution='960x1080', framerate=24) as camera:
     output = StreamingOutput()
     # Uncomment the next line to change your Pi's Camera rotation (in degrees)
     camera.rotation = 180
@@ -84,6 +89,7 @@ with picamera.PiCamera(resolution='900x1024', framerate=24) as camera:
     try:
         address = ('', 5001)
         server = StreamingServer(address, StreamingHandler)
+        print('Server online.')
         server.serve_forever()
     finally:
         camera.stop_recording()
