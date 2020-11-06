@@ -28,8 +28,10 @@ class StreamingOutput(object):
             self.buffer.seek(0)
             global safeImage
             if safeImage:
+                # with io.open('/home/pi/Babycam/AngularClient/dist/BabyCam/media/'
+                #              + str(round(time.time() * 1000)) + '.jpg', 'wb') as file:
                 with io.open('/home/pi/Babycam/AngularClient/dist/BabyCam/media/'
-                             + str(round(time.time() * 1000)) + '.jpg', 'wb') as file:
+                             + 'test' + '.mjpg', 'wb') as file:
                     file.write(buf)
                 print('image saved')
                 safeImage = False
