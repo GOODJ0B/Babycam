@@ -28,10 +28,8 @@ class StreamingOutput(object):
             self.buffer.seek(0)
             global safeImage
             if safeImage:
-                # with io.open('/home/pi/Babycam/AngularClient/dist/BabyCam/media/'
-                #              + str(round(time.time() * 1000)) + '.jpg', 'wb') as file:
                 with io.open('/home/pi/Babycam/AngularClient/dist/BabyCam/media/'
-                             + 'test' + '.mjpg', 'wb') as file:
+                             + str(round(time.time() * 1000)) + '.jpg', 'wb') as file:
                     file.write(buf)
                 print('image saved')
                 safeImage = False
@@ -83,10 +81,14 @@ class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     daemon_threads = True
 
 
-with picamera.PiCamera(resolution='960x1080', framerate=24) as camera:
+with picamera.PiCamera(resolution='960x1088', framerate=24) as camera:
     output = StreamingOutput()
     # Uncomment the next line to change your Pi's Camera rotation (in degrees)
     camera.rotation = 180
+
+    camera.led = False
+
+    stream = picamera.PiCameraCircularIO(camera, seconds=20)
     camera.start_recording(output, format='mjpeg')
     try:
         address = ('', 5001)

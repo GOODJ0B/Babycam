@@ -13,8 +13,8 @@ export class AppComponent implements OnInit {
   public pressure: number;
   public width: number;
   public height: number;
-  private videoResolutionWidth = 960;
-  private videoResolutionHeight = 1080;
+  private videoResolutionWidth = 960; // should be divisible by 32
+  private videoResolutionHeight = 1088; // should be divisible by 16
   public saveSuccessFul: boolean;
 
   constructor(public readonly babycamService: BabycamService) {
