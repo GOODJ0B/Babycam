@@ -1,9 +1,13 @@
 <img [width]="width" [height]="height" [src]="babycamService.streamUrl">
-<span *ngIf="temperature !== undefined" style="margin-left: 3px">
 <br>
 <a class="circle-link" [class.green]="saveSuccessFul" (click)="saveStill()">Maak foto</a>
  &nbsp; <a href="/media?C=M;O=D">open foto's</a>
+<span *ngIf="temperature !== undefined" style="margin-left: 3px">
   {{temperature}} &#8451;
   - {{humidity}} rH
   - {{pressure}} hPa
+</span>
+<span *ngIf="doorbellService.doorbellStatus !== undefined">
+  <a *ngIf="!doorbellService.doorbellStatus" class="circle-link green" (click)="doorbellService.doorbellOn()">Deurbel aan</a>
+  <a *ngIf="doorbellService.doorbellStatus" class="circle-link red" (click)="doorbellService.doorbellOff()">Deurbel uit</a>
 </span>

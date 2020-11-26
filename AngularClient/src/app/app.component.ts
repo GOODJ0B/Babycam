@@ -1,5 +1,6 @@
 import {Component, HostListener, OnInit} from '@angular/core';
 import {BabycamService} from '../service/babycam-service';
+import {DoorbellService} from '../service/doorbell-service';
 
 @Component({
   selector: 'app-root',
@@ -17,13 +18,15 @@ export class AppComponent implements OnInit {
   private videoResolutionHeight = 1088; // should be divisible by 16
   public saveSuccessFul: boolean;
 
-  constructor(public readonly babycamService: BabycamService) {
+  constructor(public readonly babycamService: BabycamService,
+              public readonly doorbellService: DoorbellService) {
   }
 
   public ngOnInit(): void {
     this.updateValues();
     // setInterval(this.updateValues.bind(this), 60000);
     this.onResize(null);
+    this.doorbellService.checkDoorbellStatus();
   }
 
   @HostListener('window:resize', ['$event'])

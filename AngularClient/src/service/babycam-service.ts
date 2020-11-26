@@ -8,7 +8,7 @@ import {Observable} from 'rxjs';
 })
 export class BabycamService {
 
-  public url: string;
+  private url: string;
   private streamPort = 5001;
   private utilitiesPort = 5000;
   public streamUrl: string;
