@@ -26,6 +26,7 @@ def gen(camera):
 
 @app.route('/video')
 def video():
+    random = request.args.get('random')
     """Video streaming route. Put this in the src attribute of an img tag."""
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
