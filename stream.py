@@ -49,7 +49,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
 
-        elif self.path == '/video':
+        elif self.path == '/video' or self.path == '/video?':
             self.send_response(200)
             self.send_header('Age', 0)
             self.send_header('Cache-Control', 'no-cache, private')
