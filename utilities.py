@@ -13,7 +13,7 @@ def home():
     return 'Online.'
 
 @app.route('/screenshots', methods=['GET'])
-def home():
+def getScreenshots():
     files = [f for f in listdir('/home/pi/Babycam/AngularClient/dist/BabyCam/media') if isfile(join('/home/pi/Babycam/AngularClient/dist/BabyCam/media', f))]
 
     return files
