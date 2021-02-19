@@ -2,6 +2,8 @@ import flask
 from flask_cors import CORS
 import smbus2
 import bme280
+from os import listdir
+from os.path import isfile, join
 
 app = flask.Flask(__name__)
 CORS(app)
@@ -10,6 +12,11 @@ CORS(app)
 def home():
     return 'Online.'
 
+@app.route('/screenshots', methods=['GET'])
+def home():
+    files = [f for f in listdir('/home/pi/Babycam/AngularClient/dist/BabyCam/media') if isfile(join('/home/pi/Babycam/AngularClient/dist/BabyCam/media', f))]
+
+    return files
 
 @app.route('/values', methods=['GET'])
 def sendCommand():
